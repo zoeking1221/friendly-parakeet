@@ -1,13 +1,13 @@
 // Get references to the #generate element
 var generateBtn = document.querySelector("#generate");
 
-// Write password to the #password input
+// define global variables
 var lowercaseSet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "P", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
 var uppercaseSet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
 var numberSet = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 var specialSet = ["!", "#", "$", "%", "&", "'", "(", ")", "*", "+", '"', ",", "-", ".", "/", ":", ";", "<", "=", ">", "?", "@", "", "^", "_", "`", "{", "|", "}", "~"]
-var passwordArray = [""]
 
+// write function to get prompts and info from users about different pw preferences
 function passwordInput() {
   
   var promptLength = window.prompt("How many characters would you like your password to contain?");
@@ -52,32 +52,50 @@ function passwordInput() {
   return userChoices;
 
 }
+// function to generate random character
 function randomChar (array) {
   var arrayItem = Math.floor(Math.random() * array.length);
   return array[arrayItem];
 }
-
+// function to generate password
 function generatePassword () {
   var getPasswordInput = passwordInput ();
-  for (var i = 0; i < getPasswordInput.length; i++) {
-    password = randomChar(lowercaseSet) + randomChar(uppercaseSet) + randomChar(numberSet) + randomChar(specialSet);
+  var passwordArray = [];
+  var selectionsArray = [];
+  if (getPasswordInput.lowercase) {
+    passwordArray = passwordArray + randomChar(lowercaseSet);
+    selectionsArray = selectionsArray.concat(lowercaseSet);
+  };
+
+  if (getPasswordInput.uppercase) {
+    passwordArray = passwordArray + randomChar(uppercaseSet);
+    selectionsArray = selectionsArray.concat(uppercaseSet);
+  }
+
+  if (getPasswordInput.number) {
+    passwordArray = passwordArray + randomChar(numberSet);
+    selectionsArray = selectionsArray.concat(numberSet);
+  }
+
+  if (getPasswordInput.special) {
+    passwordArray = passwordArray + randomChar(specialSet);
+    selectionsArray = selectionsArray.concat(specialSet);
   }
   
+  var newLength = getPasswordInput.length - passwordArray.length;
+
+  for (var i = 0; i < newLength; i++) {
+    var password = passwordArray += randomChar(selectionsArray);
+    console.log(password);
+  }
   return password;
- 
- 
-  console.log(getPasswordInput);
-  // return password (set it equal to pw)
 }  
 
-
   function writePassword () {
-  // from starter code:
     var password = generatePassword();
     var passwordText = document.querySelector("#password");
     passwordText.value = password;
   }
-
   
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
